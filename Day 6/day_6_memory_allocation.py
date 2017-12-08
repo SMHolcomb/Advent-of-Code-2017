@@ -4,7 +4,7 @@
 
 
 """
-PART I
+--- Part One ---
 In this area, there are sixteen memory banks; each memory bank can hold any number of blocks. 
 The goal of the reallocation routine is to balance the blocks between the memory banks.
 
@@ -36,8 +36,19 @@ The third bank is chosen, and the same thing happens: 2 4 1 2.
 At this point, we've reached a state we've seen before: 2 4 1 2 was already seen. The infinite 
 loop is detected after the fifth block redistribution cycle, and so the answer in this example is 5.
 
+
+--- Part Two ---
+
+The debugger would also like to know the size of the loop: starting from a state that has already been seen, 
+how many block redistribution cycles must be performed before that same state is seen again?
+
+In the example above, 2 4 1 2 is seen again after four cycles, and so the answer in that example would be 4.
+
 RESOURCE: https://stackoverflow.com/questions/6193498/pythonic-way-to-find-maximum-value-and-its-index-in-a-list
 https://infohost.nmt.edu/tcc/help/pubs/python/web/divmod-function.html
+
+
+
 """
 
 import math
@@ -96,6 +107,13 @@ def main():
 
         else:
             new_mem.append(realloc_mem)
+
+    # *** PART II ***
+
+    # realloc_mem = What we're looking for
+    #total length - where we found the first match
+    print(len(new_mem) - new_mem.index(realloc_mem))
+
 
 
 if __name__ == "__main__":
