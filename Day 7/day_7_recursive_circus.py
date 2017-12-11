@@ -43,6 +43,34 @@ tknk --- padx - havc
 
 bottom program = 'tknk'
 
+
+--- Part Two ---
+
+The programs explain the situation: they can't get down. Rather, they could get down, if they 
+weren't expending all of their energy trying to keep the tower balanced. Apparently, one program 
+has the wrong weight, and until it's fixed, they're stuck here.
+
+For any program holding a disc, each program standing on that disc forms a sub-tower. Each of 
+those sub-towers are supposed to be the same weight, or the disc itself isn't balanced. The 
+weight of a tower is the sum of the weights of the programs in that tower.
+
+In the example above, this means that for ugml's disc to be balanced, gyxo, ebii, and jptl 
+must all have the same weight, and they do: 61.
+
+However, for tknk to be balanced, each of the programs standing on its disc and all programs 
+above it must each match. This means that the following sums must all be the same:
+
+ugml + (gyxo + ebii + jptl) = 68 + (61 + 61 + 61) = 251
+padx + (pbga + havc + qoyq) = 45 + (66 + 66 + 66) = 243
+fwft + (ktlj + cntj + xhth) = 72 + (57 + 57 + 57) = 243
+As you can see, tknk's disc is unbalanced: ugml's stack is heavier than the other two. 
+Even though the nodes above ugml are balanced, ugml itself is too heavy: it needs to be 8 
+units lighter for its stack to weigh 243 and keep the towers balanced. If this change were 
+made, its weight would be 60.
+
+Given that exactly one program is the wrong weight, what would its weight need to be to balance the entire tower?
+
+
 """
 
 import math
@@ -63,22 +91,25 @@ def findBase(parent_nodes, child_nodes):
 
 
 def readfile():
-
+    towers = dict()
+    weights = dict()  # !! should have used a dictionary in the first place !!
     parent_nodes = []
     child_nodes = []
-    with open('recursivedata.txt','r') as towerfile:
+    with open('recursivedata_test.txt','r') as towerfile:
         for line in towerfile:
-            towers = line.strip('\n')
+            line = line.strip('\n')
             #print(towers)
                 
-            split = towers.split("->") # split line to parent and children (if any)
+            split = line.split("->") # split line to parent and children (if any)
                         
             if len(split) == 1:  #no --> with children
 
                 parent, weight = split[0].split()  # get parent and weight from first part of split
                 #print("parent:",parent,"weight:",weight)
+                #towers[parent] = []
                 parent_nodes.append(parent)
                 #print(parent_nodes)
+                weights[parent] = weight
 
             else:   #contains "->" so has children
                 
@@ -86,26 +117,43 @@ def readfile():
                 children = split[1].split()   #get children from split on --> above
                 children = [child.strip(',') for child in children]
                 #print("parent:",parent,"weight:",weight,"children:",children)
+                towers[parent] = children
                 parent_nodes.append(parent)
                 child_nodes.extend(children)
-                #parent_nodes.extend(parent)
-   
-    return parent_nodes, child_nodes
-    #base_program = findBase(parent_nodes, child_nodes)
-    #print(base_program)
+                weights[parent] = weight
+            weights[parent] = int(weight.replace('(','').replace(')',''))
+        print(weights)
+        print(towers)
+    return parent_nodes, child_nodes, weights, towers
+
 
 
 
 def main():
-
-    # *** PART I ***
-    # import
-    # determine longest list(s)
-    # if a tie, then loop through and figure out which one is not in the others. That is the bottom program
   
-    parent_nodes, child_nodes = readfile()
-    base = findBase(parent_nodes, child_nodes)
-    print(base)
+  # import
+  
+  parent_nodes, child_nodes, weights, towers = readfile()
+    
+  # *** PART I ***
+  base = findBase(parent_nodes, child_nodes)
+  print(base)
+
+  # *** PART II ***
+  # loop through towers, get weight for each child of the parent
+  
+  for k,v in weights.items():
+      print(k,v)
+
+
+
+
+
+
+
+
+
+
 
 
 
